@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  nginx:
+    build: ./nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    ports:
+      - "80:80"  # Nginx 포트 매핑
+    depends_on:
+      - api
+      - web
+
+  redis:
+    image: redis:latest
+    command: /bin/sh -c "redis-server --requirepass $$REDIS_PASSWORD"
+    env_file:
+      - ./backend/.env  # .env 파일을 로드하는 경로
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: ./backend  # FastAPI 애플리케이션의 위치
+    ports:
+      - "8000:8000"  # FastAPI 포트 매핑
+    depends_on:
+      - redis
+    env_file:
+      - ./backend/.env  
+
+  web:
+    build:
+      context: ./frontend
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
