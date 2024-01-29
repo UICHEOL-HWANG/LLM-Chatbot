@@ -12,6 +12,8 @@ import tiktoken
 
 import redis
 
+from router import users
+
 load_dotenv()
 api_key = os.getenv("OPEN_API_KEY")
 redis_host = os.getenv("REDIS_HOST")
@@ -117,6 +119,9 @@ async def chat(input_data: ChatInput):
 
     response =  answer_question(user_input, df_congest, df_population, api_key, debug=False)
     return {"User": user_input, "도봉이": response}
+
+app.include_router(users.router)
+
 
 # Run the server
 if __name__ == "__main__":
