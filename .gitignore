@@ -196,3 +196,6 @@ yarn-error.log
 /backend/.env
 venv.bat
 /backend/.env.prod
+/backend/alembic.ini
+/backend/alembic/
+/backend/migrations/
