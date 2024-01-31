@@ -1,6 +1,6 @@
 from pydantic import BaseModel, field_validator, EmailStr
 from pydantic_core.core_schema import FieldValidationInfo
-
+from datetime import datetime
 
 class UserCreate(BaseModel):
     username: str
@@ -25,5 +25,29 @@ class User(BaseModel):
     username: str
     email: str
 
+    class Config:
+        orm_mode = True
+
+class Post_list(BaseModel):
+    id : int 
+    title : str
+    content : str
+    created_at : datetime
+
+class Post_create(BaseModel):
+    title: str
+    content: str
+    
+class Post_Detail(BaseModel):
+    id: int
+    title: str
+    content: str
+    created_at: datetime  # 필드 이름 수정
+    
+    class Config:
+        orm_mode = True
+class PostUpdate(BaseModel):
+    title: str
+    content: str
     class Config:
         orm_mode = True

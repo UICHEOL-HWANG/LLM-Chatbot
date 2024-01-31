@@ -12,7 +12,7 @@ import tiktoken
 
 import redis
 
-from router import users
+from router import users,post_list,post_crud
 
 load_dotenv()
 api_key = os.getenv("OPEN_API_KEY")
@@ -121,8 +121,8 @@ async def chat(input_data: ChatInput):
     return {"User": user_input, "도봉이": response}
 
 app.include_router(users.router)
-
-
+app.include_router(post_list.router)
+app.include_router(post_crud.router)
 # Run the server
 if __name__ == "__main__":
     import uvicorn
