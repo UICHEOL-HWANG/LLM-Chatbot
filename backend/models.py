@@ -9,16 +9,17 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(50), unique=True, index=True)  # 최대 50자의 문자열
     email = Column(String(100), unique=True, index=True)  # 최대 100자의 문자열
-    hashed_password = Column(String(255))
+    password = Column(String(255),nullable=False)
 
     posts = relationship('Post', back_populates='author')
     comments = relationship('Comment', back_populates='author')
 
+    
     def set_password(self, password):
-        self.hashed_password = generate_password_hash(password)
+        self.password = generate_password_hash(password) 
 
     def check_password(self, password):
-        return check_password_hash(self.hashed_password, password)
+        return check_password_hash(self.password, password)  
 
 class Post(Base):
     __tablename__ = 'posts'

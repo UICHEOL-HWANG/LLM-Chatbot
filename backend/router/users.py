@@ -1,22 +1,24 @@
-from fastapi import APIRouter, HTTPException, Depends
-from sqlalchemy.orm import Session
-import models, schemas, database
-from models import User
+from passlib.context import CryptContext
+from sqlalchemy.orm import Session 
+from models import User 
+from schemas import UserCreate
 
-router = APIRouter()
 
-@router.post('/users/')
-def create_user(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
-    
-    db_user = db.query(User).filter(User.email == user.email).first()
-    if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    
-    db_user = models.User(username=user.username, email=user.email, hashed_password=user.password1)
+pwd_context = CryptContext(schemes=['bcrypt'],deprecated="auto")
+
+# 회원 생성
+def create_user(db:Session,user_create:UserCreate):
+    db_user = User(username=user_create.username,
+                   password=pwd_context.hash(user_create.password1),
+                   email=user_create.email)
     db.add(db_user)
     db.commit()
-    db.refresh(db_user)
-    return db_user
+    
 
-
-
+# 회원 가입 유무 
+def get_existing_user(db:Session,user_create:UserCreate):
+    return db.query(User).filter(
+        (User.username == user_create.username) | 
+        (User.email == user_create.email)
+    ).first()
+    
