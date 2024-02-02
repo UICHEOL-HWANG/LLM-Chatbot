@@ -14,13 +14,6 @@ class User(Base):
     posts = relationship('Post', back_populates='author')
     comments = relationship('Comment', back_populates='author')
 
-    
-    def set_password(self, password):
-        self.password = generate_password_hash(password) 
-
-    def check_password(self, password):
-        return check_password_hash(self.password, password)  
-
 class Post(Base):
     __tablename__ = 'posts'
     id = Column(Integer, primary_key=True, index=True)

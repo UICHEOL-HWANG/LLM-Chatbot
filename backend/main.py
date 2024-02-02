@@ -12,7 +12,8 @@ import tiktoken
 
 import redis
 
-from router import post_list,post_crud,users_router
+from router.post import post_list,post_crud
+from router.users import users_router
 
 load_dotenv()
 api_key = os.getenv("OPEN_API_KEY")

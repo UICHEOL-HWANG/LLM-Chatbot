@@ -46,3 +46,11 @@ class PostUpdate(BaseModel):
     content: str
     class Config:
         orm_mode = True
+        
+# 로그인 스키마 
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    username: str
+    
